@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelf | Library Manager</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="app-header">
+  <div class="container header-inner">
+    <div class="brand">
+      <svg class="brand-icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>
+      </svg>
+      <h1>Shelf</h1>
+    </div>
+    <div class="header-controls">
+      <div id="data-source-badge" class="badge" aria-label="Data Source">
+        <span class="status-dot"></span>
+        <span class="badge-text">...</span>
+      </div>
+      <button id="theme-toggle" class="icon-button" aria-label="Toggle theme">
+        <!-- Icon injected by JS -->
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="stats-strip" id="stats-container">
+    <!-- Populated by JS -->
+    <div class="stat-card skeleton"></div>
+    <div class="stat-card skeleton"></div>
+    <div class="stat-card skeleton"></div>
+  </section>
+
+  <section class="toolbar">
+    <div class="search-group">
+      <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="search-input" placeholder="Search books... (Press /)" aria-label="Search">
+      <button id="search-clear" class="icon-button hidden" aria-label="Clear search">
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    
+    <div class="toolbar-actions">
+      <select id="sort-select" aria-label="Sort by">
+        <option value="createdAt-desc">Newest</option>
+        <option value="title-asc">Title A–Z</option>
+        <option value="author-asc">Author A–Z</option>
+        <option value="publicationYear-desc">Year ↓</option>
+        <option value="quantity-desc">Quantity ↓</option>
+      </select>
+      
+      <div class="view-toggle">
+        <button id="view-table" class="icon-button active" aria-label="Table view">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <button id="view-grid" class="icon-button" aria-label="Grid view">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </button>
+      </div>
+
+      <button id="btn-add-book" class="button primary">Add book</button>
+    </div>
+  </section>
+
+  <div id="book-list-container" class="list-container view-table">
+    <!-- Populated by JS -->
+  </div>
+</main>
+
+<!-- Add/Edit Modal -->
+<dialog id="book-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-title" class="fraunces">Add book</h2>
+      <button class="icon-button modal-close" aria-label="Close" type="button">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <form id="book-form">
+      <input type="hidden" id="field-id">
+      
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label for="field-title">Title</label>
+          <input type="text" id="field-title" name="title" required maxlength="200">
+          <div class="error-msg" id="err-title"></div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="field-author">Author</label>
+          <input type="text" id="field-author" name="author" required maxlength="120">
+          <div class="error-msg" id="err-author"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="field-isbn">ISBN</label>
+          <input type="text" id="field-isbn" name="isbn" required>
+          <span class="help-text">10 or 13 digits; hyphens are fine</span>
+          <div class="error-msg" id="err-isbn"></div>
+        </div>
+
+        <div class="form-group row-group">
+          <div>
+            <label for="field-year">Publication Year</label>
+            <input type="number" id="field-year" name="publicationYear" required>
+            <div class="error-msg" id="err-publicationYear"></div>
+          </div>
+          <div>
+            <label for="field-quantity">Quantity</label>
+            <input type="number" id="field-quantity" name="quantity" required min="0">
+            <div class="error-msg" id="err-quantity"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="button ghost modal-close">Cancel</button>
+        <button type="submit" class="button primary" id="btn-save">
+          <span class="btn-text">Save book</span>
+          <svg class="spinner hidden" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="16"></circle></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- Delete Confirm Modal -->
+<dialog id="delete-modal" class="modal">
+  <div class="modal-content narrow">
+    <h2 class="fraunces">Delete book?</h2>
+    <p>Are you sure you want to delete "<span id="delete-book-title" class="truncate-inline"></span>"? This cannot be undone.</p>
+    <div class="modal-footer">
+      <button type="button" class="button ghost" id="btn-cancel-delete">Cancel</button>
+      <button type="button" class="button danger" id="btn-confirm-delete">Delete</button>
+    </div>
+  </div>
+</dialog>
+
+<div id="toast-container" class="toast-container" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

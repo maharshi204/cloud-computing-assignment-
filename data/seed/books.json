@@ -1,0 +1,58 @@
+[
+  {
+    "title": "The Pragmatic Programmer",
+    "author": "Andrew Hunt, David Thomas",
+    "isbn": "9780135957059",
+    "publicationYear": 2019,
+    "quantity": 3
+  },
+  {
+    "title": "Clean Code",
+    "author": "Robert C. Martin",
+    "isbn": "9780132350884",
+    "publicationYear": 2008,
+    "quantity": 1
+  },
+  {
+    "title": "Design Patterns",
+    "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+    "isbn": "0201633612",
+    "publicationYear": 1994,
+    "quantity": 5
+  },
+  {
+    "title": "Refactoring",
+    "author": "Martin Fowler",
+    "isbn": "9780134757599",
+    "publicationYear": 2018,
+    "quantity": 0
+  },
+  {
+    "title": "Domain-Driven Design",
+    "author": "Eric Evans",
+    "isbn": "0321125215",
+    "publicationYear": 2003,
+    "quantity": 2
+  },
+  {
+    "title": "Structure and Interpretation of Computer Programs",
+    "author": "Harold Abelson, Gerald Jay Sussman",
+    "isbn": "9780262510875",
+    "publicationYear": 1996,
+    "quantity": 0
+  },
+  {
+    "title": "Code Complete",
+    "author": "Steve McConnell",
+    "isbn": "9780735619678",
+    "publicationYear": 2004,
+    "quantity": 4
+  },
+  {
+    "title": "The Mythical Man-Month",
+    "author": "Frederick P. Brooks Jr.",
+    "isbn": "9780201835953",
+    "publicationYear": 1995,
+    "quantity": 2
+  }
+]
